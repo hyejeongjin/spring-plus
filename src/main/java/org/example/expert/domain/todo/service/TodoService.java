@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
+import org.example.expert.domain.todo.dto.request.TodoCondRequest;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
@@ -48,10 +49,17 @@ public class TodoService {
         );
     }
 
-    public Page<TodoResponse> getTodos(int page, int size) {
+    public Page<TodoResponse> getTodos(int page, int size, TodoCondRequest todoCondRequest) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
+        String weather = todoCondRequest.getWeather();
+        String startDate = todoCondRequest.getStartDate();
+        String endDate = todoCondRequest.getEndDate();
+
+
+        Page<Todo> todos = todoRepository.findAllByOrderByWeatherAndModifiedDate(pageable, weather, startDate, endDate);
+
+
 
         return todos.map(todo -> new TodoResponse(
                 todo.getId(),
