@@ -1,6 +1,8 @@
 package org.example.expert.domain.todo.repository;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.example.expert.domain.todo.dto.request.TodoCondRequest;
+import org.example.expert.domain.todo.entity.QTodo;
 import org.example.expert.domain.todo.entity.Todo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +20,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
             AND (t.modifiedAt IS NULL OR t.modifiedAt BETWEEN :startDate AND :endDate) ORDER BY t.modifiedAt DESC""")
     Page<Todo> findAllByOrderByWeatherAndModifiedDate(Pageable pageable, String weather,  String startDate, String endDate);
 
-    @Query("SELECT t FROM Todo t " +
-            "LEFT JOIN t.user " +
-            "WHERE t.id = :todoId")
-    Optional<Todo> findByIdWithUser(@Param("todoId") Long todoId);
+//    @Query("SELECT t FROM Todo t " +
+//            "LEFT JOIN t.user " +
+//            "WHERE t.id = :todoId")
+//    Optional<Todo> findByIdWithUser(@Param("todoId") Long todoId);
 }
